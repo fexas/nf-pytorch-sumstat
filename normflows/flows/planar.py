@@ -49,11 +49,11 @@ class Planar(Flow):
             raise NotImplementedError("Nonlinearity is not implemented.")
 
     def forward(self, z):
-        lin = torch.sum(self.w * z, list(range(1, self.w.dim())),
-                        keepdim=True) + self.b
+        lin = torch.sum(self.w * z, list(range(1, self.w.dim())), keepdim=True) + self.b
         inner = torch.sum(self.w * self.u)
-        u = self.u + (torch.log(1 + torch.exp(inner)) - 1 - inner) \
-            * self.w / torch.sum(self.w ** 2)  # constraint w.T * u > -1
+        u = self.u + (torch.log(1 + torch.exp(inner)) - 1 - inner) * self.w / torch.sum(
+            self.w**2
+        )  # constraint w.T * u > -1
         if self.act == "tanh":
             h_ = lambda x: 1 / torch.cosh(x) ** 2
         elif self.act == "leaky_relu":
@@ -67,12 +67,14 @@ class Planar(Flow):
         if self.act != "leaky_relu":
             raise NotImplementedError("This flow has no algebraic inverse.")
         lin = torch.sum(self.w * z, list(range(1, self.w.dim()))) + self.b
+        # a的维度和lin一样
         a = (lin < 0) * (
             self.h.negative_slope - 1.0
         ) + 1.0  # absorb leakyReLU slope into u
         inner = torch.sum(self.w * self.u)
-        u = self.u + (torch.log(1 + torch.exp(inner)) - 1 - inner) \
-            * self.w / torch.sum(self.w ** 2)
+        u = self.u + (torch.log(1 + torch.exp(inner)) - 1 - inner) * self.w / torch.sum(
+            self.w**2
+        )
         dims = [-1] + (u.dim() - 1) * [1]
         u = a.reshape(*dims) * u
         inner_ = torch.sum(self.w * u, list(range(1, self.w.dim())))

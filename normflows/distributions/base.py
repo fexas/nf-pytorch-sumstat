@@ -109,6 +109,7 @@ class ConditionalDiagGaussian(BaseDistribution):
     covariance matrix, parameters are obtained by a context encoder,
     context meaning the variable to condition on
     """
+
     def __init__(self, shape, context_encoder):
         """Constructor
 
@@ -155,7 +156,7 @@ class ConditionalDiagGaussian(BaseDistribution):
         return log_p
 
 
-class Uniform(BaseDistribution):
+class Multi_var_Uniform(BaseDistribution):
     """
     Multivariate uniform distribution
     """
@@ -717,3 +718,79 @@ class GaussianPCA(BaseDistribution):
         )
 
         return log_p
+
+
+# # 7.11
+# class UniformDistribution(BaseDistribution):
+#     """
+#     多元均匀分布
+#     """
+
+#     def __init__(self, shape, low=-1.0, high=1.0):
+#         """
+#         构造函数
+
+#         参数:
+#           shape: 数据的形状元组，如果是整数，则形状只有一个维度
+#           low: 均匀分布的下界
+#           high: 均匀分布的上界
+#         """
+#         super().__init__()  # 调用父类的构造函数
+
+#         # 如果 shape 是整数，将其转换为元组
+#         if isinstance(shape, int):
+#             shape = (shape,)
+#         if isinstance(shape, list):
+#             shape = tuple(shape)
+
+#         self.shape = shape  # 保存形状信息
+#         self.d = np.prod(shape)  # 计算形状的乘积（维度数）
+#         self.low = torch.tensor(low)  # 保存下界信息
+#         self.high = torch.tensor(high)  # 保存上界信息
+
+#         # 计算均匀分布的对数概率值（常数项）
+#         self.log_prob_val = -self.d * np.log(self.high - self.low)
+
+#     def forward(self, num_samples=1, context=None):
+#         """
+#         采样方法，返回从均匀分布中抽取的样本及其对数概率
+
+#         参数:
+#           num_samples: 要抽取的样本数量，默认为 1
+#           context: 上下文信息，本实现中未使用
+
+#         返回:
+#           z: 从均匀分布中抽取的样本
+#           log_p: 样本的对数概率
+#         """
+#         eps = torch.rand(
+#             (num_samples,) + self.shape, dtype=self.low.dtype, device=self.low.device
+#         )  # 生成随机数（在 [0, 1) 区间内）
+
+#         # 将随机数缩放到均匀分布的范围内，并计算对数概率
+#         z = self.low + (self.high - self.low) * eps
+#         log_p = self.log_prob_val * torch.ones(num_samples, device=self.low.device)
+
+#         return z, log_p
+
+#     def log_prob(self, z, context=None):
+#         """
+#         计算给定样本的对数概率密度
+
+#         参数:
+#           z: 输入的样本
+#           context: 上下文信息，本实现中未使用
+
+#         返回:
+#           log_p: 样本的对数概率密度
+#         """
+#         log_p = self.log_prob_val * torch.ones(
+#             z.shape[0], device=z.device
+#         )  # 初始化对数概率
+
+#         # 检查样本是否超出分布的范围，如果是，则将对数概率设置为负无穷
+#         out_range = torch.logical_or(z < self.low, z > self.high)
+#         ind_inf = torch.any(torch.reshape(out_range, (z.shape[0], -1)), dim=-1)
+#         log_p[ind_inf] = -np.inf
+
+#         return log_p

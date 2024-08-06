@@ -6,7 +6,7 @@ from . import (
     resnet,
 )
 
-from .mlp import MLP
+from .mlp import MLP, ConditionalMLP
 
 from .cnn import ConvNet2d
 

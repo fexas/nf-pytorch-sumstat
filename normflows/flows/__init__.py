@@ -6,6 +6,8 @@ from .periodic import PeriodicWrap, PeriodicShift
 
 from .planar import Planar
 from .radial import Radial
+from .sumstatplanar import SumStatPlanar
+from .sumstatplanarSim import SumStatPlanarSimp
 
 from . import affine
 from .affine.coupling import (
@@ -42,4 +44,6 @@ from . import (
     reshape,
     residual,
     stochastic,
+    sumstatplanar,
+    sumstatplanarSim,
 )

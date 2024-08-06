@@ -17,13 +17,14 @@ from .base import (
     GaussianMixture,
     GaussianPCA,
     UniformGaussian,
+    Multi_var_Uniform,
 )
 from .target import (
     Target,
     TwoMoons,
     CircularGaussianMixture,
     RingMixture,
-    TwoIndependent
+    TwoIndependent,
 )
 
 from .encoder import BaseEncoder, Dirac, Uniform, NNDiagGaussian

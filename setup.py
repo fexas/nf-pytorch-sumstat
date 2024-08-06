@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
-__version__ = "1.7.3"
+__version__ = "1.7.4"
 
 here = path.abspath(path.dirname(__file__))
 
@@ -36,7 +36,5 @@ setup(
     author="Vincent Stimper",
     author_email="vincent.stimper@tuebingen.mpg.de",
     install_requires=install_requires,
-    extras_require={
-        "docs": ["mkdocs","mkdocstrings[python]","mkdocs-jupyter"]
-    },
+    extras_require={"docs": ["mkdocs", "mkdocstrings[python]", "mkdocs-jupyter"]},
 )
